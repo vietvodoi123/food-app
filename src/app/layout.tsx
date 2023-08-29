@@ -1,8 +1,7 @@
-"use client";
 import Header from "@/components/Header";
 import "./globals.css";
 import { Poppins } from "next/font/google";
-import { Provider as ReduxProvider } from "react-redux";
+import ReduxProvider from "@/redux/ReduxProvider";
 import Provider from "./Provider";
 import store from "@/redux/store";
 const inter = Poppins({
@@ -24,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-          <ReduxProvider store={store}>
+          <ReduxProvider>
             <Header />
             {children}
           </ReduxProvider>
