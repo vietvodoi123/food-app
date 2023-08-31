@@ -14,6 +14,7 @@ module.exports = {
       },
       screens: {
         ss: "370px",
+        ssl: "480px",
         sm: "640px",
         md: "768px",
         lg: "1024px",
@@ -36,6 +37,7 @@ module.exports = {
         gray: "#f1f3f5",
         gray2: "#e9ecef",
         gray0: "#f8f9fa",
+        grape: "#da77f2",
       },
     },
   },

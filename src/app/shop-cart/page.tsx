@@ -10,8 +10,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import CartItem from "@/components/CartItem";
 import { formatNumberWithCommas } from "../function/transform";
+import TextInput from "@/components/input/TextInput";
 
 function ShopCart() {
+  const [address, setAddress] = useState("");
+  const [discount, setDiscount] = useState("");
   const [transport, setTransport] = useState("grab");
   const router = useRouter();
   const { data: session } = useSession();
@@ -19,22 +22,24 @@ function ShopCart() {
   const total = useSelector((state: IRootState) => state.total);
 
   return (
-    <div className="pt-[90px]">
-      <div className="mx-auto p-[30px] w-[70%] border-textColor border-[0.5px] border-[solid] grid grid-cols-[1.5fr_1fr] gap-[30px] rounded-[20px]">
+    <div className="pt-[80px] ss:pt-[90px] px-5 md:px-16 mb-[50px]">
+      <div className="mx-auto p-[15px] ssl:p-[20px] lg:p-[30px] lg:w-full xl:w-[70%] border-textColor border-[0.5px] border-[solid] grid-cols-1 grid md:grid-cols-[1.5fr_1fr] gap-[30px] rounded-[20px]">
         <div>
-          <span className=" text-[24px] font-semibold pb-[20px] flex gap-[20px] items-center relative after:contents=[''] after:bg-textColor after:absolute after:left-0 after:right-0 after:bottom-[10px] after:w-[100%] after:h-[1px]">
+          <span className="text-[16px] sm:text-[18px] md:text-[20px] font-semibold pb-[20px] flex gap-[20px] items-center relative after:contents=[''] after:bg-textColor after:absolute after:left-0 after:right-0 after:bottom-[10px] after:w-[100%] after:h-[1px]">
             <BiArrowBack
               className=" cursor-pointer"
               onClick={() => router.replace("/")}
             />
             <h1>Tiếp Tục Mua Sắm</h1>
           </span>
-          <div className="flex justify-between items-center py-[15px]">
-            <h1 className="flex justify-center items-center gap-[10px]">
-              <BiCartAlt className=" text-[24px]" />
-              Giỏ Hàng
+          <div className="flex justify-between items-center py-[10px] ss:py-[15px]">
+            <h1 className="flex justify-center items-center gap-[10px] text-[14px]">
+              <BiCartAlt className="text-[24px]" />
+              <p className=" hidden ssl:block">Giỏ Hàng</p>
             </h1>
-            <p>Bạn có {cartList ? cartList.length : 0} sản phẩm trong giỏ</p>
+            <p className=" text-[12px] ss:text-[14px]">
+              Bạn có {cartList ? cartList.length : 0} sản phẩm trong giỏ
+            </p>
           </div>
           <div className="h-full flex justify-center items-start">
             {cartList.length === 0 ? (
@@ -48,19 +53,20 @@ function ShopCart() {
             )}
           </div>
         </div>
-        <div className=" bg-orange1 text-white rounded-2xl p-[30px] max-h-[540px]">
-          <div className="flex justify-between items-center mb-[20px]">
-            <p className=" text-[20px] font-semibold">Chi Tiết Hóa Đơn</p>
+        <div className=" bg-orange1 text-white rounded-2xl p-[10px] md:p-[20px] lg:p-[30px] max-h-[540px]">
+          <div className="flex justify-between items-center mb-[10px] ss:mb-[20px]">
+            <p className="text-[16px] ss:text-[20px] font-semibold">
+              Chi Tiết Hóa Đơn
+            </p>
             <img
               src={
                 session?.user?.image ? session.user.image : "/img/avatar.png"
               }
-              width={40}
-              className=" rounded-xl"
+              className=" rounded-xl w-[30px] ss:w-[40px]"
             />
           </div>
-          <div className=" text-[14px] mb-[10px] relative after:contents=[''] after:absolute after:bg-white after:left-0 after:right-0 after:bottom-[10px] after:w-full after:h-[1px]">
-            <p className="mb-[15px]">Đơn vị vận chuyển: </p>
+          <div className="text-[12px] ss:text-[14px] lg:text-[16px] mb-[10px] relative after:contents=[''] after:absolute after:bg-white after:left-0 after:right-0 after:bottom-[-10px] after:w-full after:h-[1px]">
+            <p className="mb-[10px]">Đơn vị vận chuyển: </p>
             <div className=" mb-[20px] flex justify-start items-center gap-[10px]">
               <span
                 onClick={() => setTransport("uber")}
@@ -94,31 +100,25 @@ function ShopCart() {
                 </svg>
               </span>
             </div>
-            <input
-              placeholder="Nhập địa chỉ"
-              type="text"
-              className="w-full mb-[15px] p-[10px] rounded-md"
-              required
-            />
-            <input
-              placeholder="Nhập mã giảm giá"
-              type="text"
-              className="w-full mb-[40px] p-[10px] rounded-md"
-            />
+            <div className=" text-orange1">
+              <TextInput name="Địa Chỉ" setData={setAddress} />
+              <TextInput name="Mã Giảm Giá" setData={setDiscount} />
+            </div>
           </div>
-          <div className="mb-[20px] text-[14px]">
+          <div className="mb-[20px] text-[12px] ss:text-[14px]">
             <p className="flex justify-between items-center">
               Tổng Tiền Sản Phẩm:{" "}
-              <span className="text-[16px] font-bold">
+              <span className="text-[14px] ss:text-[16px] font-bold">
                 {formatNumberWithCommas(total)} vnđ
               </span>
             </p>
             <p className="flex justify-between items-center mb-[10px]">
-              Phí Vận Chuyển: <span className="text-[16px] font-bold">20</span>
+              Phí Vận Chuyển:{" "}
+              <span className="text-[14px] ss:text-[16px] font-bold">20</span>
             </p>
             <p className="flex justify-between items-center ">
               Tổng:{" "}
-              <span className="text-[16px] font-bold">
+              <span className="text-[14px] ss:text-[16px] font-bold">
                 {formatNumberWithCommas(total)} vnđ
               </span>
             </p>
@@ -127,8 +127,10 @@ function ShopCart() {
             size="large"
             className="flex justify-between items-center w-full text-white bg-textDelivery"
           >
-            <p className=" font-bold">{formatNumberWithCommas(total)} vnđ</p>
-            <span className="flex justify-between items-center">
+            <p className="text-[14px] ss:text-[16px] font-bold">
+              {formatNumberWithCommas(total)} vnđ
+            </p>
+            <span className="text-[14px] ss:text-[16px] flex justify-between items-center">
               Xác Nhận <BsArrowRight className=" inline" />
             </span>
           </Button>
