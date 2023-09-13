@@ -1,11 +1,18 @@
 import { Button } from "antd";
 import React from "react";
+import { animateScroll as scroll } from "react-scroll";
 import { MdDeliveryDining } from "react-icons/md";
 type Props = {};
 
 function Banner({}: Props) {
+  const scrollToElement = () => {
+    scroll.scrollTo(650, {
+      smooth: true,
+      duration: 1000,
+    });
+  };
   return (
-    <div className="w-full pt-[10px]">
+    <div className="w-full pt-[10px] animate-[fade-in-right_1s_ease-in-out]">
       <div className="p-2 w-max text-[10px] sm:text-[12px] lg:text-[14px] font-semibold flex items-center bg-delivery justify-center text-textDelivery rounded-full gap-2 mb-6">
         Bike Delivery
         <img
@@ -31,6 +38,9 @@ function Banner({}: Props) {
         size="large"
         shape="round"
         className=" bg-textDelivery text-white text-[12px] sm:text-[14px] md:text-[16px]"
+        onClick={() => {
+          scrollToElement();
+        }}
       >
         Order Now
       </Button>

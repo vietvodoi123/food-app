@@ -8,6 +8,7 @@ import {
   removeDishes,
 } from "@/redux/slice/CartSlice";
 import { formatNumberWithCommas } from "@/app/function/transform";
+import { ICartItem } from "../../../types";
 type Props = {
   item: ICartItem;
 };

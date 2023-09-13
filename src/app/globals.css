@@ -12,6 +12,7 @@ body {
   padding: 0;
   color: #515151;
 }
-.text-input:not(:placeholder-shown) label {
-  top: -10px;
+input[type="text"]:not(:placeholder-shown) ~ label,
+input[type="text"]:focus ~ label {
+  @apply top-[-10px] scale-75 left-0;
 }

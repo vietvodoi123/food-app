@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ICartItem, IDish } from "../../../types";
 
 interface ICart {
   cartList: ICartItem[];
@@ -6,7 +7,7 @@ interface ICart {
 }
 const initialState: ICart = { cartList: [], total: 0 };
 
-function calcTotal(cartList: ICartItem[], id: string) {
+function calcTotal(cartList: ICartItem[]) {
   const priceList = cartList.map((item) => {
     return item.price * item.count;
   });
@@ -35,7 +36,7 @@ const cartSlice = createSlice({
       } else {
         state.cartList.push(action.payload);
       }
-      state.total = calcTotal(state.cartList, action.payload.id);
+      state.total = calcTotal(state.cartList);
     },
     incrementDish: (state, action: PayloadAction<ICartItem>) => {
       const index = state.cartList.filter(
@@ -51,7 +52,7 @@ const cartSlice = createSlice({
       } else {
         state.cartList.push(action.payload);
       }
-      state.total = calcTotal(state.cartList, action.payload.id);
+      state.total = calcTotal(state.cartList);
     },
     decrementDish: (state, action: PayloadAction<ICartItem>) => {
       const index = state.cartList.filter(
@@ -70,22 +71,32 @@ const cartSlice = createSlice({
         );
         state.cartList = cart;
       }
-      state.total = calcTotal(state.cartList, action.payload.id);
+      state.total = calcTotal(state.cartList);
     },
     removeDishes: (state, action: PayloadAction<ICartItem>) => {
       const cart = state.cartList.filter(
         (item) => item.id != action.payload.id
       );
       state.cartList = cart;
-      state.total = calcTotal(state.cartList, action.payload.id);
+      state.total = calcTotal(state.cartList);
     },
 
     deleteAll: (state) => {
       state.cartList = [];
       state.total = 0;
     },
+    addMoreDishes: (state, action: PayloadAction<ICartItem[]>) => {
+      state.cartList = action.payload;
+      state.total = calcTotal(action.payload);
+    },
   },
 });
-export const { addDishes, incrementDish, decrementDish, removeDishes } =
-  cartSlice.actions;
+export const {
+  addMoreDishes,
+  addDishes,
+  incrementDish,
+  decrementDish,
+  removeDishes,
+  deleteAll,
+} = cartSlice.actions;
 export default cartSlice;

@@ -6,40 +6,53 @@ import React from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { MdShoppingBasket } from "react-icons/md";
 import { useDispatch } from "react-redux";
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import { ICartItem, IDish } from "../../../types";
+import { useSession } from "next-auth/react";
 type Props = {
   item: IDish;
 };
 
 function FruitsItem({ item }: Props) {
+  const { data: session } = useSession();
   const dispatch = useDispatch();
   const router = useRouter();
+
   const addToCart = () => {
     const dish: ICartItem = { ...item, count: 1 };
-    console.log(dish);
-    notification.success({
-      message: "Thêm sản phẩm thành công",
-      description: (
-        <div
-          className="flex justify-start items-center gap-[10px] cursor-pointer"
-          onClick={() => router.push("/shop-cart")}
-        >
-          <p>Đi đến giỏ hàng</p> <BsArrowRight />
-        </div>
-      ),
-      placement: "bottomRight",
-    });
-    dispatch(addDishes(dish));
+    if (session?.user) {
+      notification.success({
+        message: "Thêm sản phẩm thành công",
+        description: (
+          <div
+            className="flex justify-start items-center gap-[10px] cursor-pointer"
+            onClick={() => router.push("/shop-cart")}
+          >
+            <p>Đi đến giỏ hàng</p> <BsArrowRight />
+          </div>
+        ),
+        placement: "bottomRight",
+      });
+      dispatch(addDishes(dish));
+    } else {
+      notification.warning({
+        message: "Bạn chưa đăng nhập!",
+        description: "Hãy đăng nhập để tiếp tục",
+        placement: "bottomRight",
+      });
+    }
   };
   return (
     <div
       onClick={addToCart}
       className="animate-[fade-in_1s_ease-in-out] bg-gray rounded-md relative h-[120px] ss:h-[140px] lg:h-[160px] p-[10px] sm:p-[15px] hover:drop-shadow-xl hover:cursor-pointer hover:bg-gray2"
     >
-      <img
+      <LazyLoadImage
+        effect="blur"
         src={item.image}
         alt={item.name}
-        className=" absolute w-[70px] ss:w-[45%] top-[-10px] left-[15px] ss:top-[-40px] ss:left-[20px]"
+        wrapperClassName=" absolute w-[70px] ss:w-[45%] top-[-10px] left-[15px] ss:top-[-40px] ss:left-[20px]"
       />
       <span className=" absolute top-[20px] right-[15px] bg-cartNumBg rounded-full p-1 ss:p-2">
         <MdShoppingBasket className="text-[10px] ss:text-[12px] md:text-[14px] lg:text-[16px] text-white" />

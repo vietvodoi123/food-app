@@ -21,6 +21,16 @@ module.exports = {
         xl: "1280px",
         "2xl": "1536px",
       },
+      animation: {
+        scroll: "scrollAnimation 2s 2 ease-linear",
+      },
+      keyframes: {
+        scrollAnimation: {
+          "0,100%": { transform: "translateY(0)" },
+          "20%,60%": { transform: "translateY(-10px)" },
+          "40%,80%": { transform: "translate(10px)" },
+        },
+      },
       colors: {
         headingColor: "#2e2e2e",
         textColor: "#515151",
@@ -44,6 +54,8 @@ module.exports = {
   safelist: [
     "animate-[fade-in_1s_ease-in-out]",
     "animate-[fade-in-down_1s_ease-in-out]",
+    "animate-[fade-in-right_3s_ease-in-out]",
+    "animate-[fade-in-left_3s_ease-in-out]",
   ],
   plugins: [],
 };

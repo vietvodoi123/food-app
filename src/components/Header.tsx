@@ -1,11 +1,10 @@
 "use client";
-import { Button, Modal, Drawer, Menu } from "antd";
+import { Button, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import { MdShoppingBasket } from "react-icons/md";
 import LoginModal from "./modal/LoginModal";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import { BiSolidUser, BiLogOut } from "react-icons/bi";
-import { motion } from "framer-motion";
 import {
   doc,
   getFirestore,
@@ -26,7 +25,7 @@ const Header = (props: Props) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const router = useRouter();
 
-  const countCart = useSelector((state: IRootState) => state.cartList);
+  const countCart = useSelector((state: IRootState) => state.cart.cartList);
 
   const isAuth = session ? true : false;
 
@@ -58,7 +57,14 @@ const Header = (props: Props) => {
     }
   }
   const items = [
-    { label: "info", key: "info", icon: <BiSolidUser /> },
+    {
+      label: "info",
+      key: "info",
+      icon: <BiSolidUser />,
+      onClick: () => {
+        router.push("/infor");
+      },
+    },
     {
       label: "Log out",
       key: "logout",
@@ -81,7 +87,7 @@ const Header = (props: Props) => {
         <Menu
           onMouseLeave={() => setIsOpenMenu(false)}
           items={items}
-          className=" absolute bottom-[-100px]"
+          className=" absolute bottom-[-100px] right-[5px] drop-shadow-md rounded-md"
         ></Menu>
       )}
     </div>
@@ -92,7 +98,7 @@ const Header = (props: Props) => {
       {/* desktop and tablet */}
       <div className="hidden md:flex justify-between items-center w-full h-full p-4 px-16 bg-white ">
         <div
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => router.push("/")}
         >
           <img src="/img/logo.png" className="w-8 object-cover" alt="logo" />
@@ -140,12 +146,11 @@ const Header = (props: Props) => {
             shape="round"
             size="large"
             className="ml-8"
-            onClick={() => setIsOpen(true)}
+            onClick={() => signIn()}
           >
             <p className="text-[18px]">LogIn</p>
           </Button>
         )}
-        <LoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
 
       {/* mobile */}
@@ -160,30 +165,18 @@ const Header = (props: Props) => {
           </p>
         </div>
         {isAuth ? (
-          <>
-            <div
-              className=" relative flex items-center justify-center cursor-pointer"
-              onClick={() => router.push("/shop-cart")}
-            >
-              <MdShoppingBasket className=" text-textColor text-2xl ml-8" />
-              <div
-                className={` bg-cartNumBg rounded-full w-5 h-5 flex justify-center items-center absolute top-0 right-[-10px] ${
-                  countCart ? "block" : "hidden"
-                }`}
-              >
-                <p className="text-white text-xs font-semibold">
-                  {countCart ? countCart.length : 0}
-                </p>
-              </div>
-            </div>
-            {avatarAndMenu}
-          </>
+          <img
+            onClick={() => setIsOpen(true)}
+            src={session?.user?.image ? session.user.image : "/img/avatar.png"}
+            alt="avatar"
+            className=" rounded-full w-10 object-cover ml-8 shadow-2xl"
+          />
         ) : (
           <Button
             shape="round"
             size="large"
             className="ml-8"
-            onClick={() => setIsOpen(true)}
+            onClick={() => signIn()}
           >
             <p className="text-[16px] sm:text-[18px]">LogIn</p>
           </Button>
