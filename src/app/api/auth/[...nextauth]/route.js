@@ -11,6 +11,7 @@ const handler = NextAuth({
     //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     // }),
   ],
+  secret: "abca",
   // Callbacks for various authentication events
 });
 
